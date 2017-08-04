@@ -1,0 +1,7 @@
+*.csproj
+Library
+*.sln
+*.userprefs
+*.DS_Store
+/SortEm/Library
+/SortEm/Temp
