@@ -73,11 +73,11 @@ public class GameHandler : MonoBehaviour {
 		levelAmt = 11;
 
 		//Level 1 Data
-		levelBoxes.Add (10);                   //How many boxes will spawn this level
+		levelBoxes.Add (1);                   //How many boxes will spawn this level
 		levelSpawnRate.Add (.5f);              //Box spawn rate
-		levelstar1.Add (100);                  //Score needed for 1 stars
-		levelstar2.Add (200);                  //Score needed for 2 stars
-		levelstar3.Add (300);                  //Score needed for 3 stars
+		levelstar1.Add (1000);                  //Score needed for 1 stars
+		levelstar2.Add (2000);                  //Score needed for 2 stars
+		levelstar3.Add (3000);                  //Score needed for 3 stars
 		levelTimers.Add (60);                  //How long the level lasts for
 		usedDropAreas.Add (1, new int[2]{0,1});//Used to activate certain drop areas
 		usedShapes.Add (1, new int[2]{1,0});   //Determines what shapes are used for this stage
@@ -364,8 +364,7 @@ public class GameHandler : MonoBehaviour {
 	public void FinishGame(){
 		StopCoroutine ("SetupGameRoutine");
 		StopCoroutine ("NormalGameRoutine");
-		int boxLength = boxesInPlay.Count-1;
-		for (int i = boxLength;i>=0;i--) {
+		for (int i = boxesInPlay.Count-1;i>=0;i--) {
 			if(boxesInPlay[i].activeSelf){
 				boxesInPlay[i].GetComponent<DraggableObject>().SendDraggableBack();
 			}
