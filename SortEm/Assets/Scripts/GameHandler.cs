@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
+using TMPro;
 
 public class GameHandler : MonoBehaviour {
 
@@ -14,6 +15,7 @@ public class GameHandler : MonoBehaviour {
 	[Header("Prefab Reference")]
 	public GameObject dragOb;
 	public GameObject levelSelectorOb;
+	public GameObject worldSelectorOb;
 	public GameObject comboShowOb;
 	[Header("UI Reference")]
 	public GameObject splashScreen;
@@ -23,7 +25,7 @@ public class GameHandler : MonoBehaviour {
 	public GameObject resumeGame;
 	public GameObject exitGame;
 	public Slider timeSlider;
-	public Text goldCount;
+	public TextMeshProUGUI goldCount;
 	public Text selectorPopUpLevel;
 	public Text scoreText;
 	public Text countdownText;
@@ -34,7 +36,8 @@ public class GameHandler : MonoBehaviour {
 	[Header("Game Holder Reference")]
 	public Transform spawnHolder;
 	public Transform gameHolder;
-	public Transform scrollOb;
+	public Transform worldButtonHolder, levelButtonHolder;
+	public RectTransform worldButtonGroup, levelButtonGroup;
 	public RectTransform scoreBar;
 	public Stack<GameObject> boxes = new Stack<GameObject>();
 	public List<GameObject> boxesInPlay = new List<GameObject> ();
@@ -47,6 +50,7 @@ public class GameHandler : MonoBehaviour {
 	[HideInInspector] public List<bool> spawnBool = new List<bool>();
 	[HideInInspector] public List<int> possibleSpawns = new List<int>();
 	[HideInInspector] public int levelAmt = 1;
+	[HideInInspector] public int worldAmt = 1;
 	[HideInInspector] public int currentLevel;
 	[HideInInspector] public int score = 0;
 	[HideInInspector] public int boxesDone = 0;
@@ -54,24 +58,26 @@ public class GameHandler : MonoBehaviour {
 	[HideInInspector] public List<int> levelBoxes = new List<int>();
 	List<float> levelSpawnRate = new List<float>();
 	List<LevelSelector> levelSelectors = new List<LevelSelector>();
+	List<LevelSelector> worldSelectors = new List<LevelSelector>();
 	[HideInInspector] public List<int> levelstar1 = new List<int>();
 	[HideInInspector] public List<int> levelstar2 = new List<int>();
 	[HideInInspector] public List<int> levelstar3 = new List<int>();
 	[HideInInspector] public List<int> levelTimers = new List<int>();
+	[HideInInspector] public List<int> worldNumber = new List<int>();
 	List<bool> isBoss = new List<bool>();
 	Dictionary<int, int[]> usedDropAreas = new Dictionary<int, int[]>();
 	Dictionary<int, int[]> usedShapes = new Dictionary<int, int[]>();
 	PopUpController currentPopUp;
 	[HideInInspector] public int xBoxCounter = 0;
 	[HideInInspector] public int bossHealth = 0;
-
+	public bool choosingLevels = false;
 
 	void Start(){
 		instance = this;
 		Application.targetFrameRate = 60;
 		//Level Data
+		worldAmt = 8;
 		levelAmt = 11;
-
 		//Level 1 Data
 		levelBoxes.Add (1);                   //How many boxes will spawn this level
 		levelSpawnRate.Add (.5f);              //Box spawn rate
@@ -79,6 +85,7 @@ public class GameHandler : MonoBehaviour {
 		levelstar2.Add (2000);                  //Score needed for 2 stars
 		levelstar3.Add (3000);                  //Score needed for 3 stars
 		levelTimers.Add (60);                  //How long the level lasts for
+		worldNumber.Add(1);
 		usedDropAreas.Add (1, new int[2]{0,1});//Used to activate certain drop areas
 		usedShapes.Add (1, new int[2]{1,0});   //Determines what shapes are used for this stage
 		isBoss.Add (false);                    //Is this a boss stage?
@@ -90,6 +97,7 @@ public class GameHandler : MonoBehaviour {
 		levelstar2.Add (1000);
 		levelstar3.Add (1500);
 		levelTimers.Add (60);
+		worldNumber.Add(1);
 		usedDropAreas.Add (2, new int[2]{0,1});
 		usedShapes.Add (2, new int[2]{1,0});
 		isBoss.Add (false); 
@@ -101,6 +109,7 @@ public class GameHandler : MonoBehaviour {
 		levelstar2.Add (1500);
 		levelstar3.Add (2000);
 		levelTimers.Add (60);
+		worldNumber.Add(1);
 		usedDropAreas.Add (3, new int[2]{0,1});
 		usedShapes.Add (3, new int[2]{1,2});
 		isBoss.Add (false); 
@@ -112,6 +121,7 @@ public class GameHandler : MonoBehaviour {
 		levelstar2.Add (1500);
 		levelstar3.Add (2000);
 		levelTimers.Add (60);
+		worldNumber.Add(1);
 		usedDropAreas.Add (4, new int[2]{0,1});
 		usedShapes.Add (4, new int[2]{2,1});
 		isBoss.Add (false); 
@@ -123,6 +133,7 @@ public class GameHandler : MonoBehaviour {
 		levelstar2.Add (2000);
 		levelstar3.Add (2500);
 		levelTimers.Add (60);
+		worldNumber.Add(2);
 		usedDropAreas.Add (5, new int[2]{0,1});
 		usedShapes.Add (5, new int[2]{2,3});
 		isBoss.Add (false); 
@@ -134,6 +145,7 @@ public class GameHandler : MonoBehaviour {
 		levelstar2.Add (2500);
 		levelstar3.Add (3000);
 		levelTimers.Add (60);
+		worldNumber.Add(3);
 		usedDropAreas.Add (6, new int[2]{0,1});
 		usedShapes.Add (6, new int[2]{0,3});
 		isBoss.Add (false); 
@@ -145,6 +157,7 @@ public class GameHandler : MonoBehaviour {
 		levelstar2.Add (3000);
 		levelstar3.Add (3500);
 		levelTimers.Add (60);
+		worldNumber.Add(4);
 		usedDropAreas.Add (7, new int[3]{0,4,5});
 		usedShapes.Add (7, new int[3]{1,0,2});
 		isBoss.Add (false); 
@@ -156,6 +169,7 @@ public class GameHandler : MonoBehaviour {
 		levelstar2.Add (3500);
 		levelstar3.Add (4000);
 		levelTimers.Add (60);
+		worldNumber.Add(5);
 		usedDropAreas.Add (8, new int[3]{0,4,5});
 		usedShapes.Add (8, new int[3]{3,1,20});
 		isBoss.Add (false); 
@@ -167,6 +181,7 @@ public class GameHandler : MonoBehaviour {
 		levelstar2.Add (3500);
 		levelstar3.Add (4000);
 		levelTimers.Add (60);
+		worldNumber.Add(6);
 		usedDropAreas.Add (9, new int[4]{2,3,4,5});
 		usedShapes.Add (9, new int[4]{1,0,2,3});
 		isBoss.Add (false); 
@@ -178,6 +193,7 @@ public class GameHandler : MonoBehaviour {
 		levelstar2.Add (4500);
 		levelstar3.Add (5000);
 		levelTimers.Add (60);
+		worldNumber.Add(7);
 		usedDropAreas.Add (10, new int[4]{2,3,4,5});
 		usedShapes.Add (10, new int[4]{3,2,0,1});
 		isBoss.Add (false); 
@@ -189,6 +205,7 @@ public class GameHandler : MonoBehaviour {
 		levelstar2.Add (4500);
 		levelstar3.Add (5000);
 		levelTimers.Add (60);
+		worldNumber.Add(8);
 		usedDropAreas.Add (11, new int[4]{9,10,11,12});
 		usedShapes.Add (11, new int[4]{0,1,2,4});
 		isBoss.Add (true); 
@@ -218,8 +235,8 @@ public class GameHandler : MonoBehaviour {
 			count++;
 		}
 		goldCount.text = PlayerPrefs.GetInt ("coins").ToString ();
-		SetupLevelSelectors ();
-		SyncLevelSelectors ();
+
+		SetupWorldSelectors ();
 	}
 
 	IEnumerator SetupGameRoutine(){
@@ -369,7 +386,6 @@ public class GameHandler : MonoBehaviour {
 				boxesInPlay[i].GetComponent<DraggableObject>().SendDraggableBack();
 			}
 		}
-		SyncLevelSelectors ();
 		resumeGame.SetActive (false);
 		exitGame.SetActive (false);
 		countdownText.text = "";
@@ -391,30 +407,68 @@ public class GameHandler : MonoBehaviour {
 		popped.GetComponent<ComboShow> ().ShowComboText (good);
 	}
 
-	void SetupLevelSelectors(){
-		int col = 0; int row = 0;
-		for(int i=0;i<levelAmt;i++){
-			//When spawning buttons, start at 90x -50y and add +110 per button 4 per row
-			GameObject temp = Instantiate(levelSelectorOb);
-			Vector2 pos = new Vector2(90,-150);
-			pos.x += 110*col;
-			pos.y -= 110*row;
-			temp.GetComponent<RectTransform>().SetParent(scrollOb);
+	void SetupWorldSelectors(){
+		Vector2 pos = new Vector2(0,-73);
+		for(int i=0;i<worldAmt;i++){
+			GameObject temp = Instantiate(worldSelectorOb);
+			temp.GetComponent<RectTransform>().SetParent(worldButtonHolder);
 			temp.GetComponent<RectTransform>().anchoredPosition = pos;
-			levelSelectors.Add(temp.GetComponent<LevelSelector>());
-			col++;
-			if(col==4){
-				col=0;
-				row++;
+			worldSelectors.Add(temp.GetComponent<LevelSelector>());
+			worldSelectors [i].SetupSelector (i + 1, i + 1, true);
+			pos.y -= 146;
+		}
+		worldButtonHolder.GetComponent<RectTransform> ().sizeDelta = new Vector2(0, (pos.y*-1));
+	}
+
+	public void SetupLevelSelectors(int world){
+		choosingLevels = true;
+		Vector2 pos = new Vector2(0,-73);
+		int levels = 0;
+		for(int i=0;i<levelAmt;i++){
+			if (worldNumber[i] == world) {
+				GameObject temp = Instantiate (levelSelectorOb);
+				temp.GetComponent<RectTransform> ().SetParent (levelButtonHolder);
+				temp.GetComponent<RectTransform> ().anchoredPosition = pos;
+				levelSelectors.Add (temp.GetComponent<LevelSelector> ());
+				levels++;
+				levelSelectors [levels-1].SetupSelector (i + 1, levels, false);
+				pos.y -= 146;
+			}
+		}
+		levelButtonHolder.GetComponent<RectTransform> ().sizeDelta = new Vector2(0, (146*levels));
+		StartCoroutine ("AnimateSelectors");
+	}
+
+	public void BackToWorldButtons(){
+		choosingLevels = false;
+		StartCoroutine ("AnimateSelectors");
+	}
+
+	IEnumerator AnimateSelectors(){
+		float moveAmt = 550f;
+		if (choosingLevels) {
+			moveAmt = -550f;
+		}
+		float worldOb = worldButtonGroup.anchoredPosition.x;
+		float levelOb = levelButtonGroup.GetComponent<RectTransform> ().anchoredPosition.x;
+		float lerp = 0;
+		for (float i = 0; i < .3f; i += Time.deltaTime) {
+			lerp = Mathf.SmoothStep (worldOb, worldOb + moveAmt, i/.3f);
+			worldButtonGroup.GetComponent<RectTransform> ().anchoredPosition = new Vector2 (lerp, 0);
+			lerp = Mathf.SmoothStep (levelOb, levelOb + moveAmt, i/.3f);
+			levelButtonGroup.GetComponent<RectTransform> ().anchoredPosition = new Vector2 (lerp, 0);
+			yield return null;
+		}
+		worldButtonGroup.GetComponent<RectTransform> ().anchoredPosition = new Vector2 (worldOb + moveAmt, 0);
+		levelButtonGroup.GetComponent<RectTransform> ().anchoredPosition = new Vector2 (levelOb + moveAmt, 0);
+		if (!choosingLevels) {
+			for (int i = levelSelectors.Count-1; i > -1; i--) {
+				Destroy (levelSelectors [i].gameObject);
+				levelSelectors.RemoveAt (i);
 			}
 		}
 	}
-	
-	public void SyncLevelSelectors(){
-		for(int i=0;i<levelSelectors.Count;i++){
-			levelSelectors[i].SetupSelector(i+1);
-		}
-	}
+
 
 	public void LevelSelected(int level){
 		currentLevel = level;
