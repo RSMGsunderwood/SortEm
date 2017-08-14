@@ -79,7 +79,7 @@ public class GameHandler : MonoBehaviour {
 		worldAmt = 8;
 		levelAmt = 11;
 		//Level 1 Data
-		levelBoxes.Add (1);                   //How many boxes will spawn this level
+		levelBoxes.Add (15);                   //How many boxes will spawn this level
 		levelSpawnRate.Add (.5f);              //Box spawn rate
 		levelstar1.Add (1000);                  //Score needed for 1 stars
 		levelstar2.Add (2000);                  //Score needed for 2 stars
@@ -91,8 +91,8 @@ public class GameHandler : MonoBehaviour {
 		isBoss.Add (false);                    //Is this a boss stage?
 
 		//Level 2 Data
-		levelBoxes.Add (15);
-		levelSpawnRate.Add (2.5f);
+		levelBoxes.Add (25);
+		levelSpawnRate.Add (.4f);
 		levelstar1.Add (500);
 		levelstar2.Add (1000);
 		levelstar3.Add (1500);
@@ -103,8 +103,8 @@ public class GameHandler : MonoBehaviour {
 		isBoss.Add (false); 
 
 		//Level 3 Data
-		levelBoxes.Add (20);
-		levelSpawnRate.Add (2.5f);
+		levelBoxes.Add (30);
+		levelSpawnRate.Add (.4f);
 		levelstar1.Add (1000);
 		levelstar2.Add (1500);
 		levelstar3.Add (2000);
@@ -116,11 +116,11 @@ public class GameHandler : MonoBehaviour {
 
 		//Level 4 Data
 		levelBoxes.Add (20);
-		levelSpawnRate.Add (2.5f);
+		levelSpawnRate.Add (.5f);
 		levelstar1.Add (1000);
 		levelstar2.Add (1500);
 		levelstar3.Add (2000);
-		levelTimers.Add (60);
+		levelTimers.Add (30);
 		worldNumber.Add(1);
 		usedDropAreas.Add (4, new int[2]{0,1});
 		usedShapes.Add (4, new int[2]{2,1});
@@ -128,7 +128,7 @@ public class GameHandler : MonoBehaviour {
 
 		//Level 5 Data
 		levelBoxes.Add (25);
-		levelSpawnRate.Add (2f);
+		levelSpawnRate.Add (.5f);
 		levelstar1.Add (1500);
 		levelstar2.Add (2000);
 		levelstar3.Add (2500);
@@ -140,7 +140,7 @@ public class GameHandler : MonoBehaviour {
 
 		//Level 6 Data
 		levelBoxes.Add (27);
-		levelSpawnRate.Add (1.7f);
+		levelSpawnRate.Add (.5f);
 		levelstar1.Add (2000);
 		levelstar2.Add (2500);
 		levelstar3.Add (3000);
@@ -152,7 +152,7 @@ public class GameHandler : MonoBehaviour {
 
 		//Level 7 Data
 		levelBoxes.Add (30);
-		levelSpawnRate.Add (1.5f);
+		levelSpawnRate.Add (.5f);
 		levelstar1.Add (2500);
 		levelstar2.Add (3000);
 		levelstar3.Add (3500);
@@ -164,7 +164,7 @@ public class GameHandler : MonoBehaviour {
 
 		//Level 8 Data
 		levelBoxes.Add (35);
-		levelSpawnRate.Add (1.25f);
+		levelSpawnRate.Add (.5f);
 		levelstar1.Add (3000);
 		levelstar2.Add (3500);
 		levelstar3.Add (4000);
@@ -176,7 +176,7 @@ public class GameHandler : MonoBehaviour {
 
 		//Level 9 Data
 		levelBoxes.Add (35);
-		levelSpawnRate.Add (1f);
+		levelSpawnRate.Add (.5f);
 		levelstar1.Add (3000);
 		levelstar2.Add (3500);
 		levelstar3.Add (4000);
@@ -383,7 +383,7 @@ public class GameHandler : MonoBehaviour {
 		StopCoroutine ("NormalGameRoutine");
 		for (int i = boxesInPlay.Count-1;i>=0;i--) {
 			if(boxesInPlay[i].activeSelf){
-				boxesInPlay[i].GetComponent<DraggableObject>().SendDraggableBack();
+				boxesInPlay[i].GetComponent<DraggableObject>().SendDraggableBack(false);
 			}
 		}
 		resumeGame.SetActive (false);
@@ -470,9 +470,9 @@ public class GameHandler : MonoBehaviour {
 	}
 
 
-	public void LevelSelected(int level){
+	public void LevelSelected(int level, int displayLevel){
 		currentLevel = level;
-		selectorPopUpLevel.text = "Level " + level.ToString ();
+		selectorPopUpLevel.text = "Level " + displayLevel.ToString ();
 		StartPopUp (infoWindow);
 	}
 

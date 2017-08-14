@@ -14,10 +14,12 @@ public class DraggableObject : MonoBehaviour,IDragHandler,IBeginDragHandler,IEnd
 	public int spawnPoint;
 	public bool grabbed = false;
 	public bool canBeGrabbed = true;
+	Color dColor;
 
 	void Start () {
 		m_transform = GetComponent<RectTransform>();
 		dragImage = GetComponent<Image> ();
+		dColor = dragImage.color;
 	}
 
 	//When an object is picked up, it will change status
@@ -92,17 +94,17 @@ public class DraggableObject : MonoBehaviour,IDragHandler,IBeginDragHandler,IEnd
 	}
 
 	IEnumerator GoodAnimation(){
-		Color tweenToColor = Color.white;
+		Color tweenToColor = dColor;
 		Vector3 rotationVec = Vector3.zero;
 		Vector3 scaleVec = Vector3.one;
 		int rndDir = Random.Range (0, 2);
 		if (rndDir == 0)
 			rndDir=-1;
 		for (float i=0; i<.5f; i+=Time.deltaTime) {
-			tweenToColor = Color.Lerp(Color.white, Color.green,i/.5f);
+			tweenToColor = Color.Lerp(dColor, Color.white,i/.5f);
 			tweenToColor.a = Mathf.Lerp (1,0,i/.5f);
 			rotationVec.z = Mathf.Lerp (0, 90*rndDir, i/.5f);
-			scaleVec = Vector3.Lerp (Vector3.one, new Vector3(1.5f,1.5f,1.5f), i/.5f);
+			scaleVec = Vector3.Lerp (Vector3.one, Vector3.zero, i/.5f);
 			m_transform.eulerAngles = rotationVec;
 			m_transform.localScale = scaleVec;
 			dragImage.color = tweenToColor;
@@ -112,17 +114,17 @@ public class DraggableObject : MonoBehaviour,IDragHandler,IBeginDragHandler,IEnd
 	}
 
 	IEnumerator BadAnimation(){
-		Color tweenToColor = Color.white;
+		Color tweenToColor = dColor;
 		Vector3 rotationVec = Vector3.zero;
 		Vector3 scaleVec = Vector3.one;
 		int rndDir = Random.Range (0, 2);
 		if (rndDir == 0)
 			rndDir=-1;
 		for (float i=0; i<.5f; i+=Time.deltaTime) {
-			tweenToColor = Color.Lerp(Color.white, Color.red,i/.5f);
+			tweenToColor = Color.Lerp(dColor, Color.red,i/.5f);
 			tweenToColor.a = Mathf.Lerp (1,0,i/.5f);
 			rotationVec.z = Mathf.Lerp (0, 90*rndDir, i/.5f);
-			scaleVec = Vector3.Lerp (Vector3.one, new Vector3(.5f,.5f,.5f), i/.5f);
+			scaleVec = Vector3.Lerp (Vector3.one, Vector3.zero, i/.5f);
 			m_transform.eulerAngles = rotationVec;
 			m_transform.localScale = scaleVec;
 			dragImage.color = tweenToColor;
@@ -131,7 +133,7 @@ public class DraggableObject : MonoBehaviour,IDragHandler,IBeginDragHandler,IEnd
 		SendDraggableBack ();
 	}
 
-	public void SendDraggableBack(){
+	public void SendDraggableBack(bool showResults = true){
 		StopCoroutine ("GoodAnimation");
 		StopCoroutine ("BadAnimation");
 		GameHandler.Instance.spawnBool [spawnPoint] = false;
@@ -141,10 +143,10 @@ public class DraggableObject : MonoBehaviour,IDragHandler,IBeginDragHandler,IEnd
 		GameHandler.Instance.boxesInPlay.Remove (this.gameObject);
 		m_transform.eulerAngles = Vector3.zero;
 		m_transform.localScale = Vector3.one;
-		dragImage.color = Color.white;
+		dragImage.color = dColor;
 		canBeGrabbed = true;
 		GameHandler.Instance.boxesDone++;
-		if (GameHandler.Instance.boxesDone >= GameHandler.Instance.levelBoxes [GameHandler.Instance.currentLevel - 1]) {
+		if (GameHandler.Instance.boxesDone >= GameHandler.Instance.levelBoxes [GameHandler.Instance.currentLevel - 1] && showResults) {
 			GameHandler.Instance.LastBox();
 		}
 	}

@@ -9,11 +9,13 @@ public class LevelSelector : MonoBehaviour {
 	public Sprite coinSprite;
 	public TextMeshProUGUI levelText;
 	public int levelNum;
+	int dNum;
 	bool isWorld = false;
 
 	public void SetupSelector(int level, int displayNum, bool world){
 		levelNum = level;
 		isWorld = world;
+		dNum = displayNum;
 		if (world) {
 			levelText.text = "World " + displayNum.ToString ();
 		} else {
@@ -37,7 +39,7 @@ public class LevelSelector : MonoBehaviour {
 			}
 		} else {
 			if (GameHandler.Instance.choosingLevels) {
-				GameHandler.Instance.LevelSelected (levelNum);
+				GameHandler.Instance.LevelSelected (levelNum, dNum);
 			}
 		}
 	}
