@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using TMPro;
 
 public class EndGameStats : MonoBehaviour {
 
@@ -8,17 +9,14 @@ public class EndGameStats : MonoBehaviour {
 	public RectTransform star1;
 	public RectTransform star2;
 	public RectTransform star3;
-	public Image starImage1;
-	public Image starImage2;
-	public Image starImage3;
-	public Color goldStar;
+	public Sprite goldStar;
 	[Header("Percentage Reference")]
 	public RectTransform percentStart;
 	public RectTransform percentEnd;
 	[Header("UI Elements")]
 	public Slider pointSlider;
-	public Text score;
-	public Text buttonText;
+	public TextMeshProUGUI score;
+	public TextMeshProUGUI buttonText;
 	[HideInInspector] public bool star1Achieved = false;
 	[HideInInspector] public bool star2Achieved = false;
 	[HideInInspector] public bool star3Achieved = false;
@@ -72,7 +70,7 @@ public class EndGameStats : MonoBehaviour {
 				GameHandler.Instance.AddCoins(2);
 			}
 			star1.localScale = new Vector3 (1.3f, 1.3f, 1.3f);
-			starImage1.color = goldStar;
+			star1.GetComponent<Image>().sprite = goldStar;
 		}
 		if (star2Achieved && !star2Trigger) {
 			if(!PlayerPrefs.HasKey (GameHandler.Instance.currentLevel+"star2")){
@@ -80,7 +78,7 @@ public class EndGameStats : MonoBehaviour {
 				GameHandler.Instance.AddCoins(3);
 			}
 			star2.localScale = new Vector3 (1.3f, 1.3f, 1.3f);
-			starImage2.color = goldStar;
+			star1.GetComponent<Image>().sprite = goldStar;
 		}
 		if (star3Achieved && !star3Trigger) {
 			if(!PlayerPrefs.HasKey (GameHandler.Instance.currentLevel+"star3")){
@@ -88,7 +86,7 @@ public class EndGameStats : MonoBehaviour {
 				GameHandler.Instance.AddCoins(5);
 			}
 			star3.localScale = new Vector3 (1.3f, 1.3f, 1.3f);
-			starImage3.color = goldStar;
+			star1.GetComponent<Image>().sprite = goldStar;
 		}
 		score.text = GameHandler.Instance.score.ToString();
 		pointSlider.value = Mathf.Lerp (0,1,GameHandler.Instance.score/(GameHandler.Instance.levelstar3 [GameHandler.Instance.currentLevel - 1]*1.3f));
@@ -106,7 +104,7 @@ public class EndGameStats : MonoBehaviour {
 				}
 				score.text = GameHandler.Instance.levelstar1 [GameHandler.Instance.currentLevel - 1].ToString ();
 				star1Trigger=true;
-				yield return StartCoroutine(GrowStar(star1, starImage1));
+				yield return StartCoroutine(GrowStar(star1));
 			}
 			if(star2Achieved && !star2Trigger &&  Mathf.Floor(lerpScore) >= GameHandler.Instance.levelstar2 [GameHandler.Instance.currentLevel - 1]){
 				if(!PlayerPrefs.HasKey (GameHandler.Instance.currentLevel+"star2")){
@@ -115,7 +113,7 @@ public class EndGameStats : MonoBehaviour {
 				}
 				score.text = GameHandler.Instance.levelstar2 [GameHandler.Instance.currentLevel - 1].ToString ();
 				star2Trigger=true;
-				yield return StartCoroutine(GrowStar(star2, starImage2));
+				yield return StartCoroutine(GrowStar(star2));
 			}
 			if(star3Achieved && !star3Trigger &&  Mathf.Floor(lerpScore) >= GameHandler.Instance.levelstar3 [GameHandler.Instance.currentLevel - 1]){
 				if(!PlayerPrefs.HasKey (GameHandler.Instance.currentLevel+"star3")){
@@ -124,7 +122,7 @@ public class EndGameStats : MonoBehaviour {
 				}
 				score.text = GameHandler.Instance.levelstar3 [GameHandler.Instance.currentLevel - 1].ToString ();
 				star3Trigger=true;
-				yield return StartCoroutine(GrowStar(star3, starImage3));
+				yield return StartCoroutine(GrowStar(star3));
 			}
 			lerpScore = Mathf.SmoothStep (0,GameHandler.Instance.score,i/5f);
 			pointSlider.value = Mathf.Lerp (0,1,lerpScore/(GameHandler.Instance.levelstar3 [GameHandler.Instance.currentLevel - 1]*1.3f));
@@ -136,7 +134,7 @@ public class EndGameStats : MonoBehaviour {
 		buttonText.text = "Continue";
 	}
 
-	IEnumerator GrowStar(RectTransform star, Image starImage){
+	IEnumerator GrowStar(RectTransform star){
 		float lerp;
 		for(float i=0;i<.3f;i+=Time.deltaTime){
 			lerp = Mathf.SmoothStep(1,1.3f,i/.3f);
@@ -144,7 +142,7 @@ public class EndGameStats : MonoBehaviour {
 			yield return null;
 		}
 		star.localScale = new Vector3 (1.3f, 1.3f, 1.3f);
-		starImage.color = goldStar;
+		star.GetComponent<Image>().sprite = goldStar;
 		yield return new WaitForSeconds (.5f);
 	}
 

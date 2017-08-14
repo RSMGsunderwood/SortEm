@@ -24,11 +24,11 @@ public class GameHandler : MonoBehaviour {
 	public GameObject closePopUp;
 	public GameObject resumeGame;
 	public GameObject exitGame;
-	public Slider timeSlider;
+	public Image timeSlider;
 	public TextMeshProUGUI goldCount;
-	public Text selectorPopUpLevel;
-	public Text scoreText;
-	public Text countdownText;
+	public TextMeshProUGUI selectorPopUpLevel;
+	public TextMeshProUGUI scoreText;
+	public TextMeshProUGUI countdownText;
 	public PopUpController infoWindow;
 	public EndGameStats endGameStats;
 	[Header("Shape Reference")]
@@ -42,7 +42,7 @@ public class GameHandler : MonoBehaviour {
 	public Stack<GameObject> boxes = new Stack<GameObject>();
 	public List<GameObject> boxesInPlay = new List<GameObject> ();
 	public Stack<GameObject> comboShows = new Stack<GameObject> ();
-	public Text timerText;
+	public TextMeshProUGUI timerText;
 	[HideInInspector] public bool boss1 = false;
 	List<Transform> spawnPoints = new List<Transform>();
 	[Header("Spawning Areas")]
@@ -249,7 +249,7 @@ public class GameHandler : MonoBehaviour {
 		comboInARow = 0;
 		AddScore (0);
 		float posy = 0;
-		timeSlider.value = .04f;
+		timeSlider.fillAmount = 0;
 		int y = 0;
 		for(int i=0;i<dropAreas.Count;i++) {
 			dropAreas[i].dropNum = -1;
@@ -270,10 +270,10 @@ public class GameHandler : MonoBehaviour {
 		}
 		scoreBar.anchoredPosition = new Vector2(0,393);
 		for (float i=0; i<2f; i+=Time.deltaTime) {
-			timeSlider.value = Mathf.SmoothStep(.04f,1,Mathf.SmoothStep(0,1,i/2f));
+			timeSlider.fillAmount = Mathf.SmoothStep(0,1,Mathf.SmoothStep(0,1,i/2f));
 			yield return null;
 		}
-		timeSlider.value = 1;
+		timeSlider.fillAmount = 1;
 		countdownText.gameObject.SetActive (true);
 		for (float i=3.99f; i>0; i-=Time.deltaTime) {
 			if(i>1){
@@ -305,10 +305,10 @@ public class GameHandler : MonoBehaviour {
 			tempTimer-=Time.deltaTime;
 			//Handle timer stuff!
 			if(tempTimer>0){
-				if(tempTimer/levelTimers[currentLevel-1]<=.04f){
-					timeSlider.value = .04f;
+				if(tempTimer/levelTimers[currentLevel-1]<=0){
+					timeSlider.fillAmount = 0;
 				}else{
-					timeSlider.value = tempTimer/levelTimers[currentLevel-1];
+					timeSlider.fillAmount = tempTimer/levelTimers[currentLevel-1];
 				}
 			}
 			timerText.text = tempTimer.ToString ("F1");
@@ -360,7 +360,7 @@ public class GameHandler : MonoBehaviour {
 			if (adjustTime <= 0) {
 				adjustTime = 0;
 			}
-			timeSlider.value = (adjustTime * 20) / levelTimers [currentLevel - 1];
+			timeSlider.fillAmount = (adjustTime * 20) / levelTimers [currentLevel - 1];
 			timerText.text = (adjustTime * 20).ToString ("F0");
 			scoreText.text = score.ToString ();
 			yield return null;
