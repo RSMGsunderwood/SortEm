@@ -53,14 +53,18 @@ public class DraggableObject : MonoBehaviour,IDragHandler,IBeginDragHandler,IEnd
 	//Ending drag will result in the object being disabled
 	public void OnEndDrag(PointerEventData eventData){
 		if (canBeGrabbed) {
+			GameHandler.Instance.boxesDone++;
+			if (GameHandler.Instance.boxesDone >= GameHandler.Instance.levelBoxes [GameHandler.Instance.currentLevel - 1]) {
+				GameHandler.Instance.LastBox();
+			}
 			bool pass = false;
 			foreach (DropArea drp in GameHandler.Instance.dropAreas) {
 				if (drp.dropNum == dropNum) {
 					RectTransform cage = drp.GetComponent<RectTransform> ();
-					if (m_transform.anchoredPosition.x + 25 < cage.anchoredPosition.x + (cage.sizeDelta.x / 2)
-						&& m_transform.anchoredPosition.x + 25 > cage.anchoredPosition.x - (cage.sizeDelta.x / 2)
-						&& m_transform.anchoredPosition.y + 25 < cage.anchoredPosition.y + (cage.sizeDelta.y / 2)
-						&& m_transform.anchoredPosition.y - 25 > cage.anchoredPosition.y - (cage.sizeDelta.y / 2)) {
+					if (m_transform.anchoredPosition.x + 5 < cage.anchoredPosition.x + (cage.sizeDelta.x / 2)
+						&& m_transform.anchoredPosition.x + 5 > cage.anchoredPosition.x - (cage.sizeDelta.x / 2)
+						&& m_transform.anchoredPosition.y + 5 < cage.anchoredPosition.y + (cage.sizeDelta.y / 2)
+						&& m_transform.anchoredPosition.y - 5 > cage.anchoredPosition.y - (cage.sizeDelta.y / 2)) {
 						pass = true;
 					} else {
 						pass = false;
@@ -133,7 +137,7 @@ public class DraggableObject : MonoBehaviour,IDragHandler,IBeginDragHandler,IEnd
 		SendDraggableBack ();
 	}
 
-	public void SendDraggableBack(bool showResults = true){
+	public void SendDraggableBack(){
 		StopCoroutine ("GoodAnimation");
 		StopCoroutine ("BadAnimation");
 		GameHandler.Instance.spawnBool [spawnPoint] = false;
@@ -145,9 +149,5 @@ public class DraggableObject : MonoBehaviour,IDragHandler,IBeginDragHandler,IEnd
 		m_transform.localScale = Vector3.one;
 		dragImage.color = dColor;
 		canBeGrabbed = true;
-		GameHandler.Instance.boxesDone++;
-		if (GameHandler.Instance.boxesDone >= GameHandler.Instance.levelBoxes [GameHandler.Instance.currentLevel - 1] && showResults) {
-			GameHandler.Instance.LastBox();
-		}
 	}
 }

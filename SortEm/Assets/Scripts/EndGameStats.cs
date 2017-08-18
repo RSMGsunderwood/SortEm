@@ -10,6 +10,7 @@ public class EndGameStats : MonoBehaviour {
 	public RectTransform star2;
 	public RectTransform star3;
 	public Sprite goldStar;
+	public Sprite emptyStar;
 	[Header("Percentage Reference")]
 	public RectTransform percentStart;
 	public RectTransform percentEnd;
@@ -31,6 +32,12 @@ public class EndGameStats : MonoBehaviour {
 		star1Achieved = one;
 		star2Achieved = two;
 		star3Achieved = three;
+		star1.GetComponent<Image> ().sprite = emptyStar;
+		star2.GetComponent<Image> ().sprite = emptyStar;
+		star3.GetComponent<Image> ().sprite = emptyStar;
+		star1.localScale = Vector3.one;
+		star2.localScale = Vector3.one;
+		star3.localScale = Vector3.one;
 		statsAnimating = true;
 		score.text = "0";
 		Vector2 lerpVec = new Vector2 (0, 0);
@@ -44,6 +51,18 @@ public class EndGameStats : MonoBehaviour {
 		ratio = GameHandler.Instance.levelstar3 [GameHandler.Instance.currentLevel - 1] / max;
 		lerpVec.x = Mathf.Lerp (percentStart.anchoredPosition.x, percentEnd.anchoredPosition.x, ratio);
 		star3.anchoredPosition = lerpVec;
+		if (PlayerPrefs.HasKey (GameHandler.Instance.currentLevel + "star1")) {
+			star1.localScale = new Vector3 (1.3f, 1.3f, 1.3f);
+			star1.GetComponent<Image>().sprite = goldStar;
+		}
+		if (PlayerPrefs.HasKey (GameHandler.Instance.currentLevel + "star2")) {
+			star2.localScale = new Vector3 (1.3f, 1.3f, 1.3f);
+			star2.GetComponent<Image>().sprite = goldStar;
+		}
+		if (PlayerPrefs.HasKey (GameHandler.Instance.currentLevel + "star3")) {
+			star3.localScale = new Vector3 (1.3f, 1.3f, 1.3f);
+			star3.GetComponent<Image>().sprite = goldStar;
+		}
 		gameObject.SetActive (true);
 		StartCoroutine("ShowStatsRoutine");
 	}
@@ -65,28 +84,28 @@ public class EndGameStats : MonoBehaviour {
 		StopCoroutine ("ShowStatsRoutine");
 		StopCoroutine ("GrowStar");
 		if (star1Achieved && !star1Trigger) {
-			if(!PlayerPrefs.HasKey (GameHandler.Instance.currentLevel+"star1")){
-				PlayerPrefs.SetInt (GameHandler.Instance.currentLevel+"star1",1);
-				GameHandler.Instance.AddCoins(2);
+			if (!PlayerPrefs.HasKey (GameHandler.Instance.currentLevel + "star1")) {
+				PlayerPrefs.SetInt (GameHandler.Instance.currentLevel + "star1", 1);
+				GameHandler.Instance.AddCoins (2);
+				star1.localScale = new Vector3 (1.3f, 1.3f, 1.3f);
+				star1.GetComponent<Image> ().sprite = goldStar;
 			}
-			star1.localScale = new Vector3 (1.3f, 1.3f, 1.3f);
-			star1.GetComponent<Image>().sprite = goldStar;
 		}
 		if (star2Achieved && !star2Trigger) {
-			if(!PlayerPrefs.HasKey (GameHandler.Instance.currentLevel+"star2")){
-				PlayerPrefs.SetInt (GameHandler.Instance.currentLevel+"star2",1);
-				GameHandler.Instance.AddCoins(3);
+			if (!PlayerPrefs.HasKey (GameHandler.Instance.currentLevel + "star2")) {
+				PlayerPrefs.SetInt (GameHandler.Instance.currentLevel + "star2", 1);
+				GameHandler.Instance.AddCoins (3);
+				star2.localScale = new Vector3 (1.3f, 1.3f, 1.3f);
+				star1.GetComponent<Image> ().sprite = goldStar;
 			}
-			star2.localScale = new Vector3 (1.3f, 1.3f, 1.3f);
-			star1.GetComponent<Image>().sprite = goldStar;
 		}
 		if (star3Achieved && !star3Trigger) {
-			if(!PlayerPrefs.HasKey (GameHandler.Instance.currentLevel+"star3")){
-				PlayerPrefs.SetInt (GameHandler.Instance.currentLevel+"star3",1);
-				GameHandler.Instance.AddCoins(5);
+			if (!PlayerPrefs.HasKey (GameHandler.Instance.currentLevel + "star3")) {
+				PlayerPrefs.SetInt (GameHandler.Instance.currentLevel + "star3", 1);
+				GameHandler.Instance.AddCoins (5);
+				star3.localScale = new Vector3 (1.3f, 1.3f, 1.3f);
+				star1.GetComponent<Image> ().sprite = goldStar;
 			}
-			star3.localScale = new Vector3 (1.3f, 1.3f, 1.3f);
-			star1.GetComponent<Image>().sprite = goldStar;
 		}
 		score.text = GameHandler.Instance.score.ToString();
 		pointSlider.value = Mathf.Lerp (0,1,GameHandler.Instance.score/(GameHandler.Instance.levelstar3 [GameHandler.Instance.currentLevel - 1]*1.3f));
@@ -98,31 +117,31 @@ public class EndGameStats : MonoBehaviour {
 		float lerpScore = 0;
 		for (float i = 0; i < 5f; i += Time.deltaTime) {
 			if(star1Achieved && !star1Trigger && Mathf.Floor(lerpScore) >= GameHandler.Instance.levelstar1 [GameHandler.Instance.currentLevel - 1]){
-				if(!PlayerPrefs.HasKey (GameHandler.Instance.currentLevel+"star1")){
-					PlayerPrefs.SetInt (GameHandler.Instance.currentLevel+"star1",1);
-					GameHandler.Instance.AddCoins(2);
+				if (!PlayerPrefs.HasKey (GameHandler.Instance.currentLevel + "star1")) {
+					PlayerPrefs.SetInt (GameHandler.Instance.currentLevel + "star1", 1);
+					GameHandler.Instance.AddCoins (2);
+					score.text = GameHandler.Instance.levelstar1 [GameHandler.Instance.currentLevel - 1].ToString ();
+					star1Trigger = true;
+					yield return StartCoroutine (GrowStar (star1));
 				}
-				score.text = GameHandler.Instance.levelstar1 [GameHandler.Instance.currentLevel - 1].ToString ();
-				star1Trigger=true;
-				yield return StartCoroutine(GrowStar(star1));
 			}
 			if(star2Achieved && !star2Trigger &&  Mathf.Floor(lerpScore) >= GameHandler.Instance.levelstar2 [GameHandler.Instance.currentLevel - 1]){
-				if(!PlayerPrefs.HasKey (GameHandler.Instance.currentLevel+"star2")){
-					PlayerPrefs.SetInt (GameHandler.Instance.currentLevel+"star2",1);
-					GameHandler.Instance.AddCoins(3);
+				if (!PlayerPrefs.HasKey (GameHandler.Instance.currentLevel + "star2")) {
+					PlayerPrefs.SetInt (GameHandler.Instance.currentLevel + "star2", 1);
+					GameHandler.Instance.AddCoins (3);
+					score.text = GameHandler.Instance.levelstar2 [GameHandler.Instance.currentLevel - 1].ToString ();
+					star2Trigger = true;
+					yield return StartCoroutine (GrowStar (star2));
 				}
-				score.text = GameHandler.Instance.levelstar2 [GameHandler.Instance.currentLevel - 1].ToString ();
-				star2Trigger=true;
-				yield return StartCoroutine(GrowStar(star2));
 			}
 			if(star3Achieved && !star3Trigger &&  Mathf.Floor(lerpScore) >= GameHandler.Instance.levelstar3 [GameHandler.Instance.currentLevel - 1]){
-				if(!PlayerPrefs.HasKey (GameHandler.Instance.currentLevel+"star3")){
-					PlayerPrefs.SetInt (GameHandler.Instance.currentLevel+"star3",1);
-					GameHandler.Instance.AddCoins(5);
+				if (!PlayerPrefs.HasKey (GameHandler.Instance.currentLevel + "star3")) {
+					PlayerPrefs.SetInt (GameHandler.Instance.currentLevel + "star3", 1);
+					GameHandler.Instance.AddCoins (5);
+					score.text = GameHandler.Instance.levelstar3 [GameHandler.Instance.currentLevel - 1].ToString ();
+					star3Trigger = true;
+					yield return StartCoroutine (GrowStar (star3));
 				}
-				score.text = GameHandler.Instance.levelstar3 [GameHandler.Instance.currentLevel - 1].ToString ();
-				star3Trigger=true;
-				yield return StartCoroutine(GrowStar(star3));
 			}
 			lerpScore = Mathf.SmoothStep (0,GameHandler.Instance.score,i/5f);
 			pointSlider.value = Mathf.Lerp (0,1,lerpScore/(GameHandler.Instance.levelstar3 [GameHandler.Instance.currentLevel - 1]*1.3f));
@@ -136,8 +155,8 @@ public class EndGameStats : MonoBehaviour {
 
 	IEnumerator GrowStar(RectTransform star){
 		float lerp;
-		for(float i=0;i<.3f;i+=Time.deltaTime){
-			lerp = Mathf.SmoothStep(1,1.3f,i/.3f);
+		for(float i=0;i<.1f;i+=Time.deltaTime){
+			lerp = Mathf.SmoothStep(1,1.3f,i/.1f);
 			star.localScale = new Vector3(lerp,lerp,lerp);
 			yield return null;
 		}

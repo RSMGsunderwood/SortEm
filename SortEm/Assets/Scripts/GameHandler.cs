@@ -83,7 +83,7 @@ public class GameHandler : MonoBehaviour {
 		levelSpawnRate.Add (.5f);              //Box spawn rate
 		levelstar1.Add (1000);                  //Score needed for 1 stars
 		levelstar2.Add (2000);                  //Score needed for 2 stars
-		levelstar3.Add (3000);                  //Score needed for 3 stars
+		levelstar3.Add (3500);                  //Score needed for 3 stars
 		levelTimers.Add (60);                  //How long the level lasts for
 		worldNumber.Add(1);
 		usedDropAreas.Add (1, new int[2]{0,1});//Used to activate certain drop areas
@@ -93,9 +93,9 @@ public class GameHandler : MonoBehaviour {
 		//Level 2 Data
 		levelBoxes.Add (25);
 		levelSpawnRate.Add (.4f);
-		levelstar1.Add (500);
-		levelstar2.Add (1000);
-		levelstar3.Add (1500);
+		levelstar1.Add (5000);
+		levelstar2.Add (6000);
+		levelstar3.Add (7500);
 		levelTimers.Add (60);
 		worldNumber.Add(1);
 		usedDropAreas.Add (2, new int[2]{0,1});
@@ -105,9 +105,9 @@ public class GameHandler : MonoBehaviour {
 		//Level 3 Data
 		levelBoxes.Add (30);
 		levelSpawnRate.Add (.4f);
-		levelstar1.Add (1000);
-		levelstar2.Add (1500);
-		levelstar3.Add (2000);
+		levelstar1.Add (6000);
+		levelstar2.Add (7500);
+		levelstar3.Add (9500);
 		levelTimers.Add (60);
 		worldNumber.Add(1);
 		usedDropAreas.Add (3, new int[2]{0,1});
@@ -115,11 +115,11 @@ public class GameHandler : MonoBehaviour {
 		isBoss.Add (false); 
 
 		//Level 4 Data
-		levelBoxes.Add (20);
+		levelBoxes.Add (35);
 		levelSpawnRate.Add (.5f);
-		levelstar1.Add (1000);
-		levelstar2.Add (1500);
-		levelstar3.Add (2000);
+		levelstar1.Add (8000);
+		levelstar2.Add (9000);
+		levelstar3.Add (11500);
 		levelTimers.Add (30);
 		worldNumber.Add(1);
 		usedDropAreas.Add (4, new int[2]{0,1});
@@ -127,11 +127,11 @@ public class GameHandler : MonoBehaviour {
 		isBoss.Add (false); 
 
 		//Level 5 Data
-		levelBoxes.Add (25);
+		levelBoxes.Add (40);
 		levelSpawnRate.Add (.5f);
-		levelstar1.Add (1500);
-		levelstar2.Add (2000);
-		levelstar3.Add (2500);
+		levelstar1.Add (9000);
+		levelstar2.Add (11000);
+		levelstar3.Add (13500);
 		levelTimers.Add (60);
 		worldNumber.Add(2);
 		usedDropAreas.Add (5, new int[2]{0,1});
@@ -139,11 +139,11 @@ public class GameHandler : MonoBehaviour {
 		isBoss.Add (false); 
 
 		//Level 6 Data
-		levelBoxes.Add (27);
+		levelBoxes.Add (45);
 		levelSpawnRate.Add (.5f);
-		levelstar1.Add (2000);
-		levelstar2.Add (2500);
-		levelstar3.Add (3000);
+		levelstar1.Add (11000);
+		levelstar2.Add (13000);
+		levelstar3.Add (15500);
 		levelTimers.Add (60);
 		worldNumber.Add(3);
 		usedDropAreas.Add (6, new int[2]{0,1});
@@ -151,11 +151,11 @@ public class GameHandler : MonoBehaviour {
 		isBoss.Add (false); 
 
 		//Level 7 Data
-		levelBoxes.Add (30);
+		levelBoxes.Add (50);
 		levelSpawnRate.Add (.5f);
-		levelstar1.Add (2500);
-		levelstar2.Add (3000);
-		levelstar3.Add (3500);
+		levelstar1.Add (12000);
+		levelstar2.Add (15000);
+		levelstar3.Add (17500);
 		levelTimers.Add (60);
 		worldNumber.Add(4);
 		usedDropAreas.Add (7, new int[3]{0,4,5});
@@ -163,23 +163,23 @@ public class GameHandler : MonoBehaviour {
 		isBoss.Add (false); 
 
 		//Level 8 Data
-		levelBoxes.Add (35);
+		levelBoxes.Add (55);
 		levelSpawnRate.Add (.5f);
-		levelstar1.Add (3000);
-		levelstar2.Add (3500);
-		levelstar3.Add (4000);
+		levelstar1.Add (11000);
+		levelstar2.Add (15000);
+		levelstar3.Add (19000);
 		levelTimers.Add (60);
 		worldNumber.Add(5);
 		usedDropAreas.Add (8, new int[3]{0,4,5});
-		usedShapes.Add (8, new int[3]{3,1,20});
+		usedShapes.Add (8, new int[3]{3,1,2});
 		isBoss.Add (false); 
 
 		//Level 9 Data
-		levelBoxes.Add (35);
+		levelBoxes.Add (60);
 		levelSpawnRate.Add (.5f);
-		levelstar1.Add (3000);
-		levelstar2.Add (3500);
-		levelstar3.Add (4000);
+		levelstar1.Add (15000);
+		levelstar2.Add (19000);
+		levelstar3.Add (21000);
 		levelTimers.Add (60);
 		worldNumber.Add(6);
 		usedDropAreas.Add (9, new int[4]{2,3,4,5});
@@ -187,11 +187,11 @@ public class GameHandler : MonoBehaviour {
 		isBoss.Add (false); 
 
 		//Level 10 Data
-		levelBoxes.Add (40);
+		levelBoxes.Add (65);
 		levelSpawnRate.Add (.5f);
-		levelstar1.Add (4000);
-		levelstar2.Add (4500);
-		levelstar3.Add (5000);
+		levelstar1.Add (19000);
+		levelstar2.Add (20000);
+		levelstar3.Add (21000);
 		levelTimers.Add (60);
 		worldNumber.Add(7);
 		usedDropAreas.Add (10, new int[4]{2,3,4,5});
@@ -351,20 +351,22 @@ public class GameHandler : MonoBehaviour {
 	}
 
 	IEnumerator AddTimeToScore(){
-		yield return new WaitForSeconds (.5f);
+		yield return new WaitForSeconds (2f);
 		float newTime =  float.Parse(timerText.text)/20f;
 		float adjustTime = newTime;
+		score += Mathf.RoundToInt(float.Parse(timerText.text)*10f);
 		for (float i = 0; i < newTime; i += .02f) {
-			score += 50;
 			adjustTime -= .02f;
 			if (adjustTime <= 0) {
 				adjustTime = 0;
 			}
 			timeSlider.fillAmount = (adjustTime * 20) / levelTimers [currentLevel - 1];
-			timerText.text = (adjustTime * 20).ToString ("F0");
-			scoreText.text = score.ToString ();
+			timerText.text = (adjustTime * 20).ToString ("F1");
+			scoreText.text = Mathf.Lerp(0,score, i/newTime).ToString ("F0");
 			yield return null;
 		}
+		scoreText.text = score.ToString ();
+		timerText.text = "0";
 		bool star1Achieved = false, star2Achieved = false, star3Achieved = false;
 		if (score >= levelstar1 [currentLevel - 1]) {
 			star1Achieved = true;
@@ -383,9 +385,10 @@ public class GameHandler : MonoBehaviour {
 		StopCoroutine ("NormalGameRoutine");
 		for (int i = boxesInPlay.Count-1;i>=0;i--) {
 			if(boxesInPlay[i].activeSelf){
-				boxesInPlay[i].GetComponent<DraggableObject>().SendDraggableBack(false);
+				boxesInPlay[i].GetComponent<DraggableObject>().SendDraggableBack();
 			}
 		}
+		SyncLevelSelectors ();
 		resumeGame.SetActive (false);
 		exitGame.SetActive (false);
 		countdownText.text = "";
@@ -437,6 +440,12 @@ public class GameHandler : MonoBehaviour {
 		}
 		levelButtonHolder.GetComponent<RectTransform> ().sizeDelta = new Vector2(0, (146*levels));
 		StartCoroutine ("AnimateSelectors");
+	}
+
+	public void SyncLevelSelectors(){
+		for (int i = levelSelectors.Count-1; i > -1; i--) {
+			levelSelectors [i].SetupSelector (levelSelectors[i].levelNum, i+1, false);
+		}
 	}
 
 	public void BackToWorldButtons(){
@@ -517,15 +526,16 @@ public class GameHandler : MonoBehaviour {
 		Image image = dropAreas [12].GetComponent<Image> ();
 		float xPos = 0;
 		Color colorL = Color.white;
+		Color colorO = image.color;
 		for (float i = 0; i < 1f; i += Time.deltaTime) {
-			colorL = Color.Lerp (Color.red, Color.white, Mathf.SmoothStep(0,1,i/1f));
-			xPos = ((Mathf.Sin (i*40)*50)-25)*(1-i);
+			colorL = Color.Lerp (Color.red, colorO, Mathf.SmoothStep(0,1,i/1f));
+			xPos = ((Mathf.Sin (i*40)*25)-25)*(1-i);
 			rect.anchoredPosition = new Vector2 (xPos, rect.anchoredPosition.y);
 			image.color = colorL;
 			yield return null;
 		}
 		rect.anchoredPosition = new Vector2 (0, rect.anchoredPosition.y);
-		image.color = Color.white;
+		image.color = colorO;
 	}
 
 }
